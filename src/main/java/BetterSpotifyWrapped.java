@@ -10,6 +10,5 @@ public class BetterSpotifyWrapped {
 
         // todo: shortest gap between songs
         // todo: longest gap between songs
-        // todo: top songs for an artist
     }
 }
