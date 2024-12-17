@@ -7,6 +7,7 @@ public class BetterSpotifyWrapped {
 
         AnalyzerEngine.topSongsByYear();
         AnalyzerEngine.topArtistsByYear();
+        AnalyzerEngine.findTopNLongestGaps();
 
         // todo: shortest gap between songs
         // todo: longest gap between songs

@@ -1,3 +1,5 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -131,6 +133,67 @@ public class AnalyzerEngine {
             System.out.println((x+1) + ".  " + topSongs.get(x));
         }
         System.out.println();
+    }
+
+    // Method to find the top N longest gaps between plays of a song
+    public static void findTopNLongestGaps() {
+        // SimpleDateFormat to parse the timestamp
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        // Group the data by song name, ensuring no null track names
+        Map<String, List<SpotifyData>> songDataMap = data.stream()
+                .filter(data -> data.getMasterMetadataTrackName() != null)  // Filter out null track names
+                .collect(Collectors.groupingBy(SpotifyData::getMasterMetadataTrackName));
+
+        // List to store the longest gap per song
+        List<Map.Entry<String, Long>> longestGaps = new ArrayList<>();
+
+        // Iterate over each song's data
+        for (Map.Entry<String, List<SpotifyData>> entry : songDataMap.entrySet()) {
+            String songName = entry.getKey();
+            List<SpotifyData> songData = entry.getValue();
+
+            // Sort the song data by timestamp
+            songData.sort(Comparator.comparing(SpotifyData::getTs));
+
+            // Initialize variables for tracking the longest gap
+            long longestGap = 0;
+            Date previousTimestamp = null;
+
+            // Iterate through the sorted song data to calculate the gap
+            for (SpotifyData song : songData) {
+                try {
+                    Date currentTimestamp = sdf.parse(song.getTs());
+
+                    if (previousTimestamp != null) {
+                        // Calculate the gap between current and previous play
+                        long gap = currentTimestamp.getTime() - previousTimestamp.getTime();
+
+                        // Update the longest gap if necessary
+                        if (gap > longestGap) {
+                            longestGap = gap;
+                        }
+                    }
+
+                    // Update the previous timestamp
+                    previousTimestamp = currentTimestamp;
+                } catch (ParseException e) {
+                }
+            }
+
+            // Store the longest gap for this song
+            if (longestGap > 0) {
+                longestGaps.add(new AbstractMap.SimpleEntry<>(songName, longestGap));
+            }
+        }
+
+        // Sort by the longest gap in descending order
+        longestGaps.sort((entry1, entry2) -> Long.compare(entry2.getValue(), entry1.getValue()));
+
+        // Return the top N longest gaps
+        for (int x = 0; x < N; x++){
+            System.out.println((x+1) + ".  " + longestGaps.get(x).getKey());
+        }
     }
 
     // getters and setters for date
