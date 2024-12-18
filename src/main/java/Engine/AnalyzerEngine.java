@@ -1,3 +1,5 @@
+package Engine;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -5,12 +7,12 @@ import java.util.stream.Collectors;
 
 public class AnalyzerEngine {
 
-    public static List<SpotifyData> data = new ArrayList<>();
-    public static String date;
-    public static int N = 5;
+    public List<SpotifyData> data = new ArrayList<>();
+    public String date;
+    public int N = 5;
 
-    public static void init(String date) {
-        AnalyzerEngine.date = date;
+    public void init(String date) {
+        this.date = date;
 
         List<String> files = new ArrayList<>();
 
@@ -24,7 +26,7 @@ public class AnalyzerEngine {
     }
 
     // prints list of top N songs by given year
-    public static void topSongsByYear(){
+    public void topSongsByYear(){
         Map<String, Integer> songCountMap = new HashMap<>();
         int count = 0;
 
@@ -46,7 +48,7 @@ public class AnalyzerEngine {
     }
 
     // prints list of top N artists by given year
-    public static void topArtistsByYear(){
+    public void topArtistsByYear(){
         Map<String, Integer> artistCountMap = new HashMap<>();
 
         for (SpotifyData sd : data) {
@@ -67,7 +69,7 @@ public class AnalyzerEngine {
     }
 
     // prints a hash map in a formatted manner
-    public static void printMap(Map<String, Integer> songCountMap){
+    public void printMap(Map<String, Integer> songCountMap){
         songCountMap = sortByValue(songCountMap, true);
         ArrayList<Integer> songs = new ArrayList<>(songCountMap.values());
         ArrayList<String> songTitles = new ArrayList<>(songCountMap.keySet());
@@ -79,7 +81,7 @@ public class AnalyzerEngine {
     }
 
     // sorts map of artists / song titles by their count values either ascending or descending
-    public static Map<String, Integer> sortByValue(Map<String, Integer> map, boolean descending) {
+    public Map<String, Integer> sortByValue(Map<String, Integer> map, boolean descending) {
 
         return map.entrySet()
                 .stream()
@@ -95,7 +97,7 @@ public class AnalyzerEngine {
     }
 
     // method to call getTopNSongs for top N artists
-    public static void topNArtists(Map<String, Integer> artistCountMap){
+    public void topNArtists(Map<String, Integer> artistCountMap){
         artistCountMap = sortByValue(artistCountMap, true);
         ArrayList<String> songs = new ArrayList<>(artistCountMap.keySet());
         for (int x = 0; x < N; x++) {
@@ -104,7 +106,7 @@ public class AnalyzerEngine {
     }
 
     // Method to get the top N songs for a given artist
-    public static void getTopNSongs(String artistName) {
+    public void getTopNSongs(String artistName) {
         // Step 1: Filter data for the given artist
         List<SpotifyData> artistData = data.stream()
                 .filter(data -> artistName.equals(data.getMasterMetadataAlbumArtistName()))
@@ -136,7 +138,7 @@ public class AnalyzerEngine {
     }
 
     // Method to find the top N longest gaps between plays of a song
-    public static void findTopNLongestGaps() {
+    public void findTopNLongestGaps() {
         // SimpleDateFormat to parse the timestamp
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -197,17 +199,17 @@ public class AnalyzerEngine {
     }
 
     // getters and setters for date
-    public static void setDate(String date){
-        AnalyzerEngine.date = date;
+    public void setDate(String date){
+        this.date = date;
     }
 
-    public static String getDate(){
-        return AnalyzerEngine.date;
+    public String getDate(){
+        return this.date;
     }
 
     // getters and setters for N
-    public static void setN(int N){ AnalyzerEngine.N = N; }
+    public void setN(int N){ this.N = N; }
 
-    public static int getN(){ return AnalyzerEngine.N; }
+    public int getN(){ return this.N; }
 
 }

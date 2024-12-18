@@ -1,4 +1,5 @@
-import java.io.File;
+package Engine;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -218,7 +219,7 @@ public class SpotifyData {
 
     @Override
     public String toString() {
-        return "SpotifyData{" +
+        return "Engine.SpotifyData{" +
                 "ts='" + ts + '\'' +
                 ", username='" + username + '\'' +
                 ", platform='" + platform + '\'' +
@@ -241,7 +242,7 @@ public class SpotifyData {
                 '}';
     }
 
-    // Method to read a list of JSON files and populate SpotifyData objects
+    // Method to read a list of JSON files and populate Engine.SpotifyData objects
     public static List<SpotifyData> readJsonFiles(List<String> filePaths) {
         List<SpotifyData> dataList = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
