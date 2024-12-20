@@ -292,4 +292,20 @@ public class SpotifyData {
         }
         return false;
     }
+    // method to determine if date is after start date
+    public boolean isBefore(String ts){
+        if (this.ts != null && !this.ts.isEmpty()) {
+            // Adjust for ISO-8601 format with 'Z' indicating UTC
+            DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME; // Handles "2024-12-15T22:12:53Z"
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            LocalDateTime utcTime = LocalDateTime.parse(this.ts, isoFormatter); // Parse ISO-8601
+            LocalDateTime estTime = utcTime.atZone(ZoneId.of("UTC"))
+                    .withZoneSameInstant(ZoneId.of("America/New_York"))
+                    .toLocalDateTime();
+            // Format back to desired output
+            return estTime.isBefore(LocalDateTime.parse(ts, isoFormatter));
+        }
+        return false;
+    }
 }

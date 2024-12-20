@@ -6,13 +6,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class AnalyzerEngine {
-
     public List<SpotifyData> data = new ArrayList<>();
-    public String date;
+    public int number_of_songs = 0;
+    public String beforeDate;
+    public String afterDate;
     public int N = 5;
+    public List<String> topSongs = new ArrayList<>();
+    public List<String> topArtists = new ArrayList<>();
 
-    public void init(String date) {
-        this.date = date;
+    public void init(String date, String afterDate) {
+        this.beforeDate = date;
+        this.afterDate = afterDate;
+
+        topSongs.clear();
+        topArtists.clear();
 
         List<String> files = new ArrayList<>();
 
@@ -28,22 +35,21 @@ public class AnalyzerEngine {
     // prints list of top N songs by given year
     public void topSongsByYear(){
         Map<String, Integer> songCountMap = new HashMap<>();
-        int count = 0;
 
         for (SpotifyData sd : data) {
-            if (sd.isAfter(date)){
+            if (sd.isAfter(beforeDate) && sd.isBefore(afterDate)){
                 String trackName = sd.getMasterMetadataTrackName();
 
                 if (trackName != null && !trackName.isEmpty()) {
                     songCountMap.put(trackName, songCountMap.getOrDefault(trackName, 0) + 1);
                 }
-                count++;
             }
         }
 
-        System.out.println(songCountMap.size() + " unique songs after " + date);
+        System.out.println(songCountMap.size() + " unique songs between dates: " + beforeDate + " " + afterDate);
+        number_of_songs = songCountMap.size();
 
-        printMap(songCountMap);
+        printMap(songCountMap, true);
 
     }
 
@@ -52,7 +58,7 @@ public class AnalyzerEngine {
         Map<String, Integer> artistCountMap = new HashMap<>();
 
         for (SpotifyData sd : data) {
-            if (sd.isAfter(date)){
+            if (sd.isAfter(beforeDate) && sd.isBefore(afterDate)){
                 String artistName = sd.getMasterMetadataAlbumArtistName();
 
                 if (artistName != null && !artistName.isEmpty()) {
@@ -61,21 +67,27 @@ public class AnalyzerEngine {
             }
         }
 
-        System.out.println(artistCountMap.size() + " artists after " + date);
+        System.out.println(artistCountMap.size() + " artists after between dates: " + beforeDate + " " + afterDate);
 
-        printMap(artistCountMap);
+        printMap(artistCountMap, false);
         topNArtists(artistCountMap);
 
     }
 
     // prints a hash map in a formatted manner
-    public void printMap(Map<String, Integer> songCountMap){
+    public void printMap(Map<String, Integer> songCountMap, boolean isSong){
         songCountMap = sortByValue(songCountMap, true);
         ArrayList<Integer> songs = new ArrayList<>(songCountMap.values());
         ArrayList<String> songTitles = new ArrayList<>(songCountMap.keySet());
 
         for (int x = 0; x < N; x++){
             System.out.println((x+1) + ".  " + songTitles.get(x) + " :: " + songs.get(x));
+            if (isSong){
+                topSongs.add((x+1) + ".  " + songTitles.get(x) + " with " + songs.get(x) + " plays");
+            } else {
+                topArtists.add((x+1) + ". " + songTitles.get(x) + " with " + songs.get(x) + " plays");
+            }
+
         }
         System.out.println();
     }
@@ -199,12 +211,12 @@ public class AnalyzerEngine {
     }
 
     // getters and setters for date
-    public void setDate(String date){
-        this.date = date;
+    public void setBeforeDate(String beforeDate){
+        this.beforeDate = beforeDate;
     }
 
-    public String getDate(){
-        return this.date;
+    public String getBeforeDate(){
+        return this.beforeDate;
     }
 
     // getters and setters for N
