@@ -83,9 +83,9 @@ public class AnalyzerEngine {
         for (int x = 0; x < N; x++){
             System.out.println((x+1) + ".  " + songTitles.get(x) + " :: " + songs.get(x));
             if (isSong){
-                topSongs.add((x+1) + ".  " + songTitles.get(x) + " with " + songs.get(x) + " plays");
+                topSongs.add((x+1) + ".  " + songTitles.get(x) + "\n" + songs.get(x) + " plays");
             } else {
-                topArtists.add((x+1) + ". " + songTitles.get(x) + " with " + songs.get(x) + " plays");
+                topArtists.add((x+1) + ". " + songTitles.get(x) + "\n" + songs.get(x) + " plays");
             }
 
         }
