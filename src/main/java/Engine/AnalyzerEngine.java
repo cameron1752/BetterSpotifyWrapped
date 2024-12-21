@@ -13,6 +13,7 @@ public class AnalyzerEngine {
     public int N = 5;
     public List<String> topSongs = new ArrayList<>();
     public List<String> topArtists = new ArrayList<>();
+    public List<SongData> topNArtists = new ArrayList<>();
 
     public void init(String date, String afterDate) {
         this.beforeDate = date;
@@ -20,6 +21,7 @@ public class AnalyzerEngine {
 
         topSongs.clear();
         topArtists.clear();
+        topNArtists.clear();
 
         List<String> files = new ArrayList<>();
 
@@ -119,6 +121,7 @@ public class AnalyzerEngine {
 
     // Method to get the top N songs for a given artist
     public void getTopNSongs(String artistName) {
+
         // Step 1: Filter data for the given artist
         List<SpotifyData> artistData = data.stream()
                 .filter(data -> artistName.equals(data.getMasterMetadataAlbumArtistName()))
@@ -145,6 +148,8 @@ public class AnalyzerEngine {
         System.out.println("Top " + N + " songs for artist " + artistName);
         for (int x = 0; x < N; x++) {
             System.out.println((x+1) + ".  " + topSongs.get(x));
+
+            topNArtists.add(new SongData(0, topSongs.get(x), artistName, ""));
         }
         System.out.println();
     }
